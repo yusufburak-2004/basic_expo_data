@@ -1,0 +1,25 @@
+# Import required libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Start your code here!
+private_ev_charging = pd.read_csv('private_ev_charging.csv')
+public_ev_charging = pd.read_csv('public_ev_charging.csv')
+ev_sales = pd.read_csv('ev_sales.csv')
+df_temp=private_ev_charging.merge(public_ev_charging,suffixes=['_pri','_pub'],on='year')
+ev_sales=ev_sales[['sales']]
+df_complete=df_temp.merge(ev_sales,left_index=True,right_index=True)
+fig,ax=plt.subplots(2,1,sharey=True)
+ax[0].plot(df_complete['year'],df_complete['sales'],label='sales')
+ax[0].set_xlabel('year')
+ax[0].set_ylabel('sales',color='blue')
+ax2=ax[0].twinx()
+ax2.plot(df_complete['year'],df_complete['private_ports'],color='red')
+ax2.set_ylabel('public_ports',color='red')
+ax[1].plot(df_complete['year'],df_complete['sales'])
+ax[1].set_xlabel('year')
+ax[1].set_ylabel('sales',color='blue')
+ax2=ax[1].twinx()
+ax2.plot(df_complete['year'],df_complete['public_ports'],color='red')
+ax2.set_ylabel('public_ports',color='red')
